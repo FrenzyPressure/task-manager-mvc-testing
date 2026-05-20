@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Task Manager Dashboard - Create, manage, and track your tasks">
+    <title>Task Manager - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="bg-slate-950 text-white min-h-screen" style="font-family: 'Inter', sans-serif;">
+
+    <!-- Navigation -->
+    <nav class="glass-nav sticky top-0 z-50 px-6 py-4">
+        <div class="max-w-6xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4">
+                        </path>
+                    </svg>
+                </div>
+                <h1 class="text-lg font-bold text-white">Task Manager</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <span id="usernameDisplay" class="text-slate-400 text-sm hidden sm:block"></span>
+                <a href="/logout" id="logoutBtn"
+                    class="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                        </path>
+                    </svg>
+                    Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-6 py-8 pb-32">
+        <!-- Stats Bar -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+            <div class="glass-card rounded-xl p-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-slate-400 text-xs">Total Tasks</p>
+                        <p id="totalCount" class="text-xl font-bold text-white">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card rounded-xl p-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-slate-400 text-xs">Pending</p>
+                        <p id="pendingCount" class="text-xl font-bold text-amber-400">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card rounded-xl p-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                            </path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-slate-400 text-xs">Completed</p>
+                        <p id="completedCount" class="text-xl font-bold text-emerald-400">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create Task + Search Bar -->
+        <div class="glass-card rounded-xl p-5 mb-6">
+            <div class="flex flex-col sm:flex-row gap-3">
+                <input type="text" id="newTaskTitle" placeholder="Enter a new task..." required
+                    class="input-field flex-1 px-4 py-3 rounded-xl text-white placeholder-slate-500">
+                <button id="createTaskBtn" onclick="createTask()"
+                    class="btn-primary px-6 py-3 rounded-xl text-white font-semibold text-sm whitespace-nowrap">
+                    + Create Task
+                </button>
+            </div>
+            <div class="mt-3 flex flex-col sm:flex-row gap-3">
+                <input type="text" id="searchInput" placeholder="Search tasks..."
+                    class="input-field flex-1 px-4 py-3 rounded-xl text-white placeholder-slate-500">
+                <!-- Filter dropdown -->
+                <select id="statusFilter" onchange="filterTasks()"
+                    class="input-field px-4 py-3 rounded-xl text-white bg-slate-900/60">
+                    <option value="all">All Tasks</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Completed">Completed</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Task List -->
+        <div id="taskList" class="space-y-3">
+            <!-- Tasks loaded dynamically -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-16">
+            <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-slate-800/50 flex items-center justify-center">
+                <svg class="w-10 h-10 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                        d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+                    </path>
+                </svg>
+            </div>
+            <h3 class="text-slate-400 font-medium mb-1">No tasks yet</h3>
+            <p class="text-slate-500 text-sm">Create your first task to get started</p>
+        </div>
+    </main>
+
+    <footer class="fixed bottom-0 left-0 right-0 glass-footer p-4 text-center" style="z-index: 1;">
+        <p class="text-slate-500 text-xs">Task Manager &copy; 2026</p>
+    </footer>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="fixed inset-0 z-40 hidden items-center justify-center p-4"
+        style="background: rgba(0,0,0,0.6);">
+        <div class="glass-card rounded-2xl p-6 w-full max-w-md">
+            <h2 class="text-lg font-bold text-white mb-4">Edit Task</h2>
+            <input type="hidden" id="editTaskId">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-300 mb-2">Title</label>
+                    <input type="text" id="editTaskTitle"
+                        class="input-field w-full px-4 py-3 rounded-xl text-white placeholder-slate-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-300 mb-2">Status</label>
+                    <select id="editTaskStatus"
+                        class="input-field w-full px-4 py-3 rounded-xl text-white bg-slate-900/60">
+                        <option value="Pending">Pending</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+                <div class="flex gap-3 pt-2">
+                    <button onclick="closeEditModal()"
+                        class="flex-1 py-3 rounded-xl border border-slate-600 text-slate-300 hover:bg-slate-700/50 transition-colors text-sm font-medium">
+                        Cancel
+                    </button>
+                    <button onclick="saveTask()" id="saveTaskBtn"
+                        class="flex-1 btn-primary py-3 rounded-xl text-white font-semibold text-sm">
+                        Save Task
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+</body>
+
+</html>
