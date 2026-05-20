@@ -1,18 +1,14 @@
 /**
  * Task Manager - Client-Side JavaScript
- * Contains intentional defects for testing demonstration
  */
 
 let allTasks = [];
-let currentFilter = 'all'; // DEFECT D10: Filter state stored only in JS variable, not in URL/sessionStorage
+let currentFilter = 'all';
 
 // ===== Initialize =====
 document.addEventListener('DOMContentLoaded', () => {
     loadTasks();
     setupSearch();
-
-    // DEFECT D10: No state restoration from URL or sessionStorage on page load
-    // If user navigates away and uses Back button, filter state is lost
 });
 
 // ===== Load Tasks =====
@@ -55,7 +51,6 @@ function renderTasks() {
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div class="flex-1 min-w-0">
           <div class="flex items-center gap-2 mb-1">
-            <!-- DEFECT D7: Status icon lacks alt and aria-label attributes -->
             <svg class="w-4 h-4 flex-shrink-0 ${task.status === 'Completed' ? 'text-emerald-400' : 'text-amber-400'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               ${task.status === 'Completed'
             ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>'
@@ -80,7 +75,6 @@ function renderTasks() {
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
             </svg>
           </button>
-          <!-- DEFECT D6: Delete button visually appears disabled (CSS class) but onclick is still active -->
           <button
             onclick="deleteTask(${task.id})"
             class="p-2 rounded-lg hover:bg-red-500/10 text-slate-400 hover:text-red-400 transition-colors btn-delete-disabled"
@@ -97,19 +91,16 @@ function renderTasks() {
 }
 
 // ===== Create Task =====
-// DEFECT D3: No debounce or lock — rapidly clicking creates duplicates
 async function createTask() {
     const titleInput = document.getElementById('newTaskTitle');
     const title = titleInput.value.trim();
 
-    // DEFECT D8: Frontend-only validation — if JS is disabled, this check is bypassed
     if (!title) {
         titleInput.classList.add('border-red-500');
         setTimeout(() => titleInput.classList.remove('border-red-500'), 2000);
         return;
     }
 
-    // DEFECT D3: No lock/disable on button — multiple rapid clicks send multiple requests
     try {
         const response = await fetch('/api/tasks', {
             method: 'POST',
@@ -125,7 +116,6 @@ async function createTask() {
             renderTasks();
             updateStats();
         } else {
-            // DEFECT D4: If title > 256 chars, server returns 500 — we show generic error
             alert(data.error || 'Failed to create task');
         }
     } catch (err) {
@@ -134,7 +124,6 @@ async function createTask() {
 }
 
 // ===== Delete Task =====
-// DEFECT D1: Server returns success but doesn't actually delete from DB
 async function deleteTask(id) {
     if (!confirm('Are you sure you want to delete this task?')) return;
 
@@ -143,12 +132,9 @@ async function deleteTask(id) {
         const data = await response.json();
 
         if (response.ok && data.success) {
-            // BUG (D1): Task is removed from the UI array...
             allTasks = allTasks.filter(t => t.id !== id);
             renderTasks();
             updateStats();
-            // ...but it was never actually deleted from the database.
-            // Refreshing the page will bring the task back.
         }
     } catch (err) {
         alert('Failed to delete task');
@@ -175,7 +161,6 @@ function closeEditModal() {
     modal.classList.remove('flex');
 }
 
-// DEFECT D2: Saving with status change doesn't update updated_at (handled server-side)
 async function saveTask() {
     const id = document.getElementById('editTaskId').value;
     const title = document.getElementById('editTaskTitle').value.trim();
@@ -221,7 +206,6 @@ function setupSearch() {
             }
 
             try {
-                // DEFECT D9: Search query is sent unsanitized — server concatenates it into raw SQL
                 const response = await fetch(`/api/tasks/search?q=${encodeURIComponent(query)}`);
                 const data = await response.json();
 
@@ -238,11 +222,8 @@ function setupSearch() {
 }
 
 // ===== Filter =====
-// DEFECT D10: Filter state stored only in JS variable — not persisted to URL/sessionStorage
-// Using browser Back button will reset filter to 'all'
 function filterTasks() {
     currentFilter = document.getElementById('statusFilter').value;
-    // BUG (D10): Only updates JS variable, does not push state to URL or sessionStorage
     renderTasks();
 }
 

@@ -12,4 +12,9 @@ module.exports = defineConfig({
         screenshot: 'only-on-failure',
     },
     reporter: [['list'], ['json', { outputFile: 'tests/results/test-results.json' }]],
+    webServer: {
+        command: 'node app.js',
+        url: 'http://localhost:3000',
+        reuseExistingServer: !process.env.CI,
+    },
 });

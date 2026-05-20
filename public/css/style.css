@@ -80,7 +80,7 @@ body {
   border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
-/* ===== DEFECT D6: False disabled state =====
+/* ===== Disabled State Appearance =====
    The delete button visually appears disabled (grayed out, cursor: not-allowed)
    BUT the underlying onclick event remains active and functional.
    This is an intentional CSS-only "disabled" appearance. */

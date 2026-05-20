@@ -51,7 +51,6 @@
             <div class="glass-card rounded-xl p-4">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center">
-                        <!-- DEFECT D7: Icon lacks alt tag and aria-label -->
                         <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2"></path>
@@ -66,7 +65,6 @@
             <div class="glass-card rounded-xl p-4">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center">
-                        <!-- DEFECT D7: Icon lacks alt tag and aria-label -->
                         <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -81,7 +79,6 @@
             <div class="glass-card rounded-xl p-4">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-                        <!-- DEFECT D7: Icon lacks alt tag and aria-label -->
                         <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
                             </path>
@@ -98,10 +95,8 @@
         <!-- Create Task + Search Bar -->
         <div class="glass-card rounded-xl p-5 mb-6">
             <div class="flex flex-col sm:flex-row gap-3">
-                <!-- DEFECT D8: Frontend-only validation; disabling JS allows empty task submission -->
                 <input type="text" id="newTaskTitle" placeholder="Enter a new task..." required
                     class="input-field flex-1 px-4 py-3 rounded-xl text-white placeholder-slate-500">
-                <!-- DEFECT D3: No debounce — rapid clicks create duplicate tasks -->
                 <button id="createTaskBtn" onclick="createTask()"
                     class="btn-primary px-6 py-3 rounded-xl text-white font-semibold text-sm whitespace-nowrap">
                     + Create Task
@@ -111,7 +106,6 @@
                 <input type="text" id="searchInput" placeholder="Search tasks..."
                     class="input-field flex-1 px-4 py-3 rounded-xl text-white placeholder-slate-500">
                 <!-- Filter dropdown -->
-                <!-- DEFECT D10: Filter state is managed only in JS; lost on browser Back navigation -->
                 <select id="statusFilter" onchange="filterTasks()"
                     class="input-field px-4 py-3 rounded-xl text-white bg-slate-900/60">
                     <option value="all">All Tasks</option>
@@ -140,9 +134,8 @@
         </div>
     </main>
 
-    <!-- DEFECT D5: Fixed footer with low z-index — overlaps "Save Task" button on mobile viewports -->
     <footer class="fixed bottom-0 left-0 right-0 glass-footer p-4 text-center" style="z-index: 1;">
-        <p class="text-slate-500 text-xs">Task Manager &copy; 2026 — Built for testing demonstration</p>
+        <p class="text-slate-500 text-xs">Task Manager &copy; 2026</p>
     </footer>
 
     <!-- Edit Modal -->
@@ -170,7 +163,6 @@
                         class="flex-1 py-3 rounded-xl border border-slate-600 text-slate-300 hover:bg-slate-700/50 transition-colors text-sm font-medium">
                         Cancel
                     </button>
-                    <!-- DEFECT D5: On mobile, the footer can overlap this button due to low z-index -->
                     <button onclick="saveTask()" id="saveTaskBtn"
                         class="flex-1 btn-primary py-3 rounded-xl text-white font-semibold text-sm">
                         Save Task

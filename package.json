@@ -1,7 +1,7 @@
 {
   "name": "task-manager",
   "version": "1.0.0",
-  "description": "Task Management Prototype — Testing demonstration app with 10 injected defects",
+  "description": "A simple task management web application built with Node.js and Express.",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -9,9 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "task-manager",
-    "testing",
-    "defects"
+    "task-manager"
   ],
   "author": "Lazariev Andrii",
   "license": "ISC",

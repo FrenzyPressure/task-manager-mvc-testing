@@ -23,28 +23,21 @@ const taskController = {
 
     /**
      * Create a new task
-     * DEFECT D4: No title length validation — will crash with 500 if title > 256 chars
-     * DEFECT D8: No server-side validation — empty titles accepted if JS validation bypassed
      */
     createTask(req, res) {
         const { title } = req.body;
-
-        // BUG (D8): No server-side validation for empty title
-        // BUG (D4): No check for title length > 256 characters — causes DB constraint error
 
         try {
             const result = Task.create(title, req.session.userId);
             const task = Task.getById(result.lastInsertRowid);
             res.json({ success: true, task });
         } catch (err) {
-            // D4: If title exceeds DB constraint, this catches it as a generic 500
             res.status(500).json({ error: 'Internal Server Error' });
         }
     },
 
     /**
      * Update a task
-     * DEFECT D2: Timestamp not refreshed (handled in model)
      */
     updateTask(req, res) {
         const { id } = req.params;
@@ -66,7 +59,6 @@ const taskController = {
 
     /**
      * Delete a task
-     * DEFECT D1: Orphaned entry (model returns fake success without deleting)
      */
     deleteTask(req, res) {
         const { id } = req.params;
@@ -78,7 +70,6 @@ const taskController = {
             }
 
             Task.delete(id);
-            // BUG (D1): Controller thinks deletion succeeded, but model didn't actually delete
             res.json({ success: true });
         } catch (err) {
             res.status(500).json({ error: 'Failed to delete task' });
@@ -87,7 +78,6 @@ const taskController = {
 
     /**
      * Search tasks
-     * DEFECT D9: SQL injection (handled in model)
      */
     searchTasks(req, res) {
         const { q } = req.query;
